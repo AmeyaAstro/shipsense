@@ -26,4 +26,8 @@ NUMERIC = [
     "avg_discount_rate", "n_departments", "order_hour", "order_dow", "order_month",
 ]
 
+# In DataCo the scheduled days are fixed per shipping mode (verified: no exceptions),
+# so the API derives days_scheduled instead of trusting the client to send it.
+DAYS_SCHEDULED_BY_MODE = {"Same Day": 0, "First Class": 1, "Second Class": 2, "Standard Class": 4}
+
 SEED = 42

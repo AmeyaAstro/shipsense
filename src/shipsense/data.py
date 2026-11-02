@@ -54,6 +54,15 @@ def load_order_features(db_path: Path = DB_PATH) -> pd.DataFrame:
     """Read the order-level table and add simple calendar features."""
     with sqlite3.connect(db_path) as con:
         df = pd.read_sql("SELECT * FROM order_features ORDER BY order_ts", con)
+    return add_calendar_features(df)
+
+
+def add_calendar_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Derive hour / day-of-week / month from order_ts.
+
+    Shared by training and the API so both compute features identically
+    (avoids train/serve skew).
+    """
     ts = pd.to_datetime(df["order_ts"])
     df["order_ts"] = ts
     df["order_hour"] = ts.dt.hour
