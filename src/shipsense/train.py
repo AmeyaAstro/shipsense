@@ -1,7 +1,8 @@
 """Train every model on the same time split and write an honest comparison.
 
 Run:  python -m shipsense.train
-Outputs: reports/metrics.json, reports/model_comparison.md, models/*.joblib|.pt
+Outputs: reports/metrics.json, reports/model_comparison.md, models/*.joblib|.pt,
+         and one MLflow parent run (+ a child run per model) in mlruns/.
 """
 from __future__ import annotations
 
@@ -9,8 +10,10 @@ import json
 import time
 
 import joblib
+import mlflow
 import torch
 
+from shipsense import tracking
 from shipsense.baselines import ShippingModeRule, gradient_boosting, logistic_regression
 from shipsense.config import (
     CATEGORICAL, MODELS_DIR, NUMERIC, REPORTS_DIR, TARGET, TEST_START, VAL_START,
@@ -39,6 +42,11 @@ def main() -> dict:
     }
     results = {}
     MODELS_DIR.mkdir(exist_ok=True)
+    tracking.setup()
+    parent = mlflow.start_run(run_name="train_all")
+    mlflow.log_params({"n_train": len(train), "n_val": len(val), "n_test": len(test),
+                       "val_start": VAL_START, "test_start": TEST_START,
+                       "n_features": len(cols), "features": ",".join(cols)})
     for name, model in models.items():
         t0 = time.time()
         if name == "pytorch_mlp":
@@ -54,10 +62,13 @@ def main() -> dict:
         }
         print(name, results[name]["test"])
         if name == "pytorch_mlp":
+            model_file = MODELS_DIR / "pytorch_mlp.pt"
             torch.save({"state_dict": model.model.state_dict(), "encoder": model.encoder,
-                        "history": model.history}, MODELS_DIR / "pytorch_mlp.pt")
+                        "history": model.history}, model_file)
         else:
-            joblib.dump(model, MODELS_DIR / f"{name}.joblib")
+            model_file = MODELS_DIR / f"{name}.joblib"
+            joblib.dump(model, model_file)
+        tracking.log_model_run(name, model, results[name], model_file)
 
     REPORTS_DIR.mkdir(exist_ok=True)
     summary = {"split": {"train": len(train), "val": len(val), "test": len(test),
@@ -66,6 +77,9 @@ def main() -> dict:
                "models": results}
     (REPORTS_DIR / "metrics.json").write_text(json.dumps(summary, indent=2))
     write_markdown(summary)
+    mlflow.log_artifacts(str(REPORTS_DIR), artifact_path="reports")
+    mlflow.end_run()
+    print(f"MLflow run {parent.info.run_id} logged to {tracking.TRACKING_URI}")
     return summary
 
 

@@ -69,7 +69,7 @@
         "brier": 0.1745,
         "threshold": 0.595
       },
-      "train_seconds": 2.1
+      "train_seconds": 2.4
     },
     "pytorch_mlp": {
       "val": {
@@ -90,7 +90,7 @@
         "brier": 0.1755,
         "threshold": 0.544
       },
-      "train_seconds": 8.8
+      "train_seconds": 9.4
     }
   }
 }
