@@ -1,0 +1,96 @@
+{
+  "split": {
+    "train": 39950,
+    "val": 9876,
+    "test": 13071,
+    "val_start": "2017-01-01",
+    "test_start": "2017-07-01",
+    "test_late_rate": 0.5756
+  },
+  "models": {
+    "shipping_mode_rule": {
+      "val": {
+        "roc_auc": 0.7384,
+        "pr_auc": 0.778,
+        "accuracy": 0.6941,
+        "balanced_accuracy": 0.7191,
+        "f1": 0.6633,
+        "brier": 0.1899,
+        "threshold": 0.801
+      },
+      "test": {
+        "roc_auc": 0.746,
+        "pr_auc": 0.7878,
+        "accuracy": 0.6963,
+        "balanced_accuracy": 0.7243,
+        "f1": 0.6715,
+        "brier": 0.1875,
+        "threshold": 0.801
+      },
+      "train_seconds": 0.0
+    },
+    "logistic_regression": {
+      "val": {
+        "roc_auc": 0.7446,
+        "pr_auc": 0.8336,
+        "accuracy": 0.7088,
+        "balanced_accuracy": 0.7296,
+        "f1": 0.6906,
+        "brier": 0.1897,
+        "threshold": 0.479
+      },
+      "test": {
+        "roc_auc": 0.756,
+        "pr_auc": 0.8437,
+        "accuracy": 0.7113,
+        "balanced_accuracy": 0.7354,
+        "f1": 0.6965,
+        "brier": 0.1868,
+        "threshold": 0.479
+      },
+      "train_seconds": 0.3
+    },
+    "gradient_boosting": {
+      "val": {
+        "roc_auc": 0.7672,
+        "pr_auc": 0.8489,
+        "accuracy": 0.72,
+        "balanced_accuracy": 0.7418,
+        "f1": 0.7007,
+        "brier": 0.1786,
+        "threshold": 0.595
+      },
+      "test": {
+        "roc_auc": 0.7823,
+        "pr_auc": 0.8619,
+        "accuracy": 0.7264,
+        "balanced_accuracy": 0.7503,
+        "f1": 0.7138,
+        "brier": 0.1745,
+        "threshold": 0.595
+      },
+      "train_seconds": 2.1
+    },
+    "pytorch_mlp": {
+      "val": {
+        "roc_auc": 0.7721,
+        "pr_auc": 0.8502,
+        "accuracy": 0.7192,
+        "balanced_accuracy": 0.7411,
+        "f1": 0.6997,
+        "brier": 0.1788,
+        "threshold": 0.544
+      },
+      "test": {
+        "roc_auc": 0.7799,
+        "pr_auc": 0.8599,
+        "accuracy": 0.7252,
+        "balanced_accuracy": 0.7491,
+        "f1": 0.7123,
+        "brier": 0.1755,
+        "threshold": 0.544
+      },
+      "train_seconds": 8.8
+    }
+  }
+}
