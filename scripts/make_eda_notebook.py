@@ -21,7 +21,8 @@ nb.cells = [
        "would sit in both train and test, inflating scores. **Decision: model at order level.**"),
     md("## 2. What defines the label? (leakage check)"),
     code("late_by_rule = (raw['Days for shipping (real)'] > raw['Days for shipment (scheduled)']).astype(int)\n"
-         "print('label == (real days > scheduled days):', round((late_by_rule == raw['Late_delivery_risk']).mean(), 4))\n"
+         "print('label == (real days > scheduled days):', "
+         "round((late_by_rule == raw['Late_delivery_risk']).mean(), 4))\n"
          "pd.crosstab(raw['Delivery Status'], raw['Late_delivery_risk'])"),
     md("`Days for shipping (real)` and `Delivery Status` basically *are* the label, and both are only known "
        "after delivery. Including them would give ~98-100% accuracy and a useless model. "
@@ -44,7 +45,8 @@ nb.cells = [
        "random, which caps how well *any* model can do. A realistic goal is beating the shipping-mode rule, "
        "not 99% accuracy. (This is a known property of the DataCo dataset - worth saying in interviews.)"),
     code("ts = pd.to_datetime(raw['order date (DateOrders)'])\n"
-         "raw.groupby(ts.dt.to_period('M'))['Late_delivery_risk'].mean().plot(figsize=(12, 3), title='Monthly late rate')\n"
+         "raw.groupby(ts.dt.to_period('M'))['Late_delivery_risk'].mean()"
+         ".plot(figsize=(12, 3), title='Monthly late rate')\n"
          "plt.ylim(0.4, 0.7); plt.ylabel('share late')"),
     md("The late rate is stable over time (~54-57%), so a **time-based split** "
        "(train 2015-16, validate H1 2017, test Jul 2017-Jan 2018) is fair and mirrors production."),

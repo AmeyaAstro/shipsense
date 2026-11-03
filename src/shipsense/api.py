@@ -49,7 +49,7 @@ class Order(BaseModel):
     n_departments: int = Field(ge=1)
 
     @model_validator(mode="after")
-    def check_consistent(self) -> "Order":
+    def check_consistent(self) -> Order:
         if self.total_quantity < self.n_items:
             raise ValueError("total_quantity must be >= n_items (each item has quantity >= 1)")
         if self.n_departments > self.n_items:

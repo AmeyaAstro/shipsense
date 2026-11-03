@@ -16,7 +16,13 @@ import torch
 from shipsense import tracking
 from shipsense.baselines import ShippingModeRule, gradient_boosting, logistic_regression
 from shipsense.config import (
-    CATEGORICAL, MODELS_DIR, NUMERIC, REPORTS_DIR, TARGET, TEST_START, VAL_START,
+    CATEGORICAL,
+    MODELS_DIR,
+    NUMERIC,
+    REPORTS_DIR,
+    TARGET,
+    TEST_START,
+    VAL_START,
 )
 from shipsense.data import DB_PATH, build_database, load_order_features, load_raw, time_split
 from shipsense.evaluate import best_threshold, score

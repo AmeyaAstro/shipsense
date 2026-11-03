@@ -25,7 +25,7 @@ class TabularEncoder:
     mean: pd.Series | None = None
     std: pd.Series | None = None
 
-    def fit(self, df: pd.DataFrame) -> "TabularEncoder":
+    def fit(self, df: pd.DataFrame) -> TabularEncoder:
         # id 0 is reserved for "unknown / unseen in training"
         self.vocab = {c: {v: i + 1 for i, v in enumerate(sorted(df[c].astype(str).unique()))}
                       for c in CATEGORICAL}
