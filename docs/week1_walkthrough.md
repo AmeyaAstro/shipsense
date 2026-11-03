@@ -50,8 +50,12 @@ PyTorch training loop (`TorchClassifier.fit`), line by line:
 
 ## 7. Results and the honest conclusion
 GBM 0.782 AUC ≈ PyTorch 0.780 > logistic 0.756 > rule 0.746. The deep model ties GBM but trains
-~20x slower, so GBM is the production pick. That is a *good* interview answer: you tested the
+~4x slower, so GBM is the production pick. That is a *good* interview answer: you tested the
 fancy model, measured it, and chose the simpler one on evidence.
+
+> **Correction (Week 2):** an earlier version of this doc said "~20x slower". Re-running training twice
+> on the Apple M4 measured GBM at 2.1–2.4 s and PyTorch at 8.8–9.4 s, i.e. ~4x. Accuracy numbers
+> were unchanged. Use the measured ~4x.
 
 ## 8. Resume bullets this week unlocks (truthful)
 - Built a leakage-safe late-delivery risk model on 180K supply-chain records (DataCo); engineered
@@ -59,7 +63,7 @@ fancy model, measured it, and chose the simpler one on evidence.
   baseline) to 0.782 with gradient boosting.
 - Implemented a PyTorch tabular network (entity embeddings, BatchNorm, dropout, early stopping) and
   benchmarked it against scikit-learn models; selected gradient boosting for production on equal
-  accuracy and 20x faster training.
+  accuracy and ~4x faster training.
 - Identified and removed label-leaking post-delivery fields that inflate accuracy to ~98%;
   covered the pipeline with 11 pytest unit tests.
 
