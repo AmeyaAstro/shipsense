@@ -25,6 +25,12 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.txt
 
+      # PySpark 4 runs on the JVM and needs Java 17+ (for the Spark/SQL parity test).
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

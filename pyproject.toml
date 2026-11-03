@@ -13,7 +13,10 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "spark"]
+# PySpark 4.3 hasn't certified pandas 3 yet and warns on every conversion; silence only
+# warnings raised inside pyspark (the full-data Spark==SQL check confirms correct results).
+filterwarnings = ["ignore::Warning:pyspark"]
 
 [tool.ruff]
 line-length = 120

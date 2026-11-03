@@ -1,4 +1,4 @@
-.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run
+.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features
 
 # Interpreter used to create the venv (needs 3.10+; macOS's /usr/bin/python3 is 3.9).
 # Override like: make setup PYTHON=/path/to/python3.11
@@ -7,6 +7,9 @@ VENV_BIN := .venv/bin
 # Put src/ on the import path explicitly. On an iCloud-synced Desktop, macOS can flag
 # the venv's editable-install .pth file as hidden, and Python then skips it.
 export PYTHONPATH := $(CURDIR)/src
+# PySpark 4 needs Java 17+. Use the user-level JDK in ~/.local/jdk if JAVA_HOME isn't already set.
+JAVA_HOME ?= $(lastword $(wildcard $(HOME)/.local/jdk/jdk-17*/Contents/Home))
+export JAVA_HOME
 
 setup:            ## create venv and install everything
 	$(PYTHON) -m venv .venv && $(VENV_BIN)/pip install --upgrade pip && $(VENV_BIN)/pip install -r requirements.txt && $(VENV_BIN)/pip install -e .
@@ -36,3 +39,6 @@ docker-build:     ## build the API image (run `make train` first so models/ exis
 
 docker-run:       ## run the API container at http://127.0.0.1:8000/docs (Ctrl+C to stop)
 	docker run --rm -p 127.0.0.1:8000:8000 --name shipsense-api shipsense-api:latest
+
+spark-features:   ## PySpark feature pipeline; ARGS=--compare checks it row-by-row against SQLite
+	$(VENV_BIN)/python spark/order_features_spark.py $(ARGS)
