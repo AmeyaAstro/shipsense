@@ -1,0 +1,8 @@
+# One-command local run:  docker compose up --build   (then http://127.0.0.1:8000/docs)
+services:
+  api:
+    build: .
+    image: shipsense-api:latest
+    ports:
+      - "127.0.0.1:8000:8000"   # only reachable from this Mac, not the local network
+    restart: unless-stopped

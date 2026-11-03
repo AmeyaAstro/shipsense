@@ -1,4 +1,4 @@
-.PHONY: setup data train test eda all mlflow-ui serve
+.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run
 
 # Interpreter used to create the venv (needs 3.10+; macOS's /usr/bin/python3 is 3.9).
 # Override like: make setup PYTHON=/path/to/python3.11
@@ -30,3 +30,9 @@ mlflow-ui:        ## browse all training runs at http://127.0.0.1:5000
 
 serve:            ## run the prediction API at http://127.0.0.1:8000/docs
 	$(VENV_BIN)/uvicorn shipsense.api:app --host 127.0.0.1 --port 8000
+
+docker-build:     ## build the API image (run `make train` first so models/ exists)
+	docker build -t shipsense-api:latest .
+
+docker-run:       ## run the API container at http://127.0.0.1:8000/docs (Ctrl+C to stop)
+	docker run --rm -p 127.0.0.1:8000:8000 --name shipsense-api shipsense-api:latest
