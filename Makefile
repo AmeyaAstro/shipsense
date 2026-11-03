@@ -4,6 +4,9 @@
 # Override like: make setup PYTHON=/path/to/python3.11
 PYTHON ?= $(shell command -v python3.11 || echo python3)
 VENV_BIN := .venv/bin
+# Put src/ on the import path explicitly. On an iCloud-synced Desktop, macOS can flag
+# the venv's editable-install .pth file as hidden, and Python then skips it.
+export PYTHONPATH := $(CURDIR)/src
 
 setup:            ## create venv and install everything
 	$(PYTHON) -m venv .venv && $(VENV_BIN)/pip install --upgrade pip && $(VENV_BIN)/pip install -r requirements.txt && $(VENV_BIN)/pip install -e .
