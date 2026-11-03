@@ -28,11 +28,11 @@ LLMs/RAG/agents, AWS, monitoring. Every finished milestone becomes resume bullet
 - Features in SQL: `sql/order_features.sql` (SQLite), loaded by `src/shipsense/data.py`.
 - Time split: train 2015–16, val Jan–Jun 2017, test Jul 2017–Jan 2018. Threshold tuned on val (Youden's J).
 - Test ROC-AUC: shipping-mode rule 0.746 · logistic 0.756 · **HistGradientBoosting 0.782 (production model)** ·
-  PyTorch embeddings MLP 0.780 (20x slower). 11 pytest tests pass.
+  PyTorch embeddings MLP 0.780 (~4x slower to train: 8.8–9.4 s vs 2.1–2.4 s on Apple M4; an earlier "20x" was wrong).
 - Known data property: within a shipping mode, actual days are ~uniform 2–6, so ~0.78 AUC is near
   the ceiling. Don't chase accuracy with leaky features.
 
-## Week 2 — serving + MLOps + Spark
+## Week 2 — DONE (MLflow, FastAPI, Docker, CI, PySpark parity; 25 tests; see docs/week2_walkthrough.md)
 1. **MLflow**: log params/metrics/artifacts for all 4 models in `train.py` (local `mlruns/`, gitignored).
 2. **FastAPI** `src/shipsense/api.py`: `GET /health`, `POST /predict` (Pydantic schema for one order's
    order-time fields → `{late_probability, is_late_risk, threshold, model_version}`), `POST /predict/batch`.
