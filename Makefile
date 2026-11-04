@@ -1,4 +1,4 @@
-.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features
+.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features rag-index
 
 # Interpreter used to create the venv (needs 3.10+; macOS's /usr/bin/python3 is 3.9).
 # Override like: make setup PYTHON=/path/to/python3.11
@@ -42,3 +42,6 @@ docker-run:       ## run the API container at http://127.0.0.1:8000/docs (Ctrl+C
 
 spark-features:   ## PySpark feature pipeline; ARGS=--compare checks it row-by-row against SQLite
 	$(VENV_BIN)/python spark/order_features_spark.py $(ARGS)
+
+rag-index:        ## chunk + embed knowledge/*.md into a FAISS index (data/processed/rag_index/)
+	$(VENV_BIN)/python -m shipsense.rag
