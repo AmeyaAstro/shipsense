@@ -81,8 +81,13 @@ class ShipSenseTools:
         elif order_id is not None:
             with sqlite3.connect(self.db_path) as con:
                 df = pd.read_sql("SELECT * FROM order_features WHERE order_id = ?", con, params=[int(order_id)])
-            if df.empty:  # order_features only holds shipped orders (no canceled / fraud)
-                return {"error": f"order {order_id} not found among shipped orders"}
+            if df.empty:  # order_features only holds shipped orders; say WHY there is no score
+                status = self.lookup_shipment(order_id).get("order_status")
+                if status:
+                    return {"order_id": order_id, "order_status": status,
+                            "note": f"order exists but has status {status}; it never shipped, so the "
+                                    "late-delivery model does not score it"}
+                return {"error": f"order {order_id} not found"}
             X = add_calendar_features(df)[CATEGORICAL + NUMERIC]
         else:
             return {"error": "pass order_id or order"}

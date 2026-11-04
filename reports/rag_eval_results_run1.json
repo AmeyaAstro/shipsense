@@ -1,0 +1,1090 @@
+{
+ "retrieval": {
+  "n": 17,
+  "hit@1": 0.8235294117647058,
+  "hit@4": 1.0,
+  "mrr@4": 0.9019607843137255,
+  "misses": [
+   "p02",
+   "p06",
+   "p13"
+  ]
+ },
+ "prefetch_on": [
+  {
+   "id": "p01",
+   "category": "policy",
+   "question": "How much delivery credit does a Consumer customer get when an order arrives 2 days late?",
+   "answer": "According to the policy, when an order arrives 2 to 3 days late, the Consumer customer is entitled to 25% of the order's shipping charge as a delivery credit. [03_refund_and_credit_policy.md § Credit amounts]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "01_late_shipment_escalation.md § Escalation tiers",
+    "04_customs_and_international_delays.md § Excused delays"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 13.1,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p02",
+   "category": "policy",
+   "question": "What is the maximum delivery credit per order before Finance approval is needed?",
+   "answer": "According to the policies, the maximum delivery credit per order before Finance approval is needed is $250. This cap applies to credits such as those for orders that are 4+ days late, where a full refund of the shipping charge and a $15 goodwill credit are issued. Credits exceeding this amount require Finance approval. [03_refund_and_credit_policy.md § Credit amounts]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "11_corporate_account_sla.md § Enhanced credits",
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules",
+    "07_shipping_mode_upgrade_policy.md § Approval limits"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 15.5,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p03",
+   "category": "policy",
+   "question": "How many scheduled days does Second Class shipping have?",
+   "answer": "According to the policy, Second Class shipping has a scheduled delivery of 2 days [02_carrier_sla_by_shipping_mode.md § Scheduled delivery days].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "02_carrier_sla_by_shipping_mode.md § Known weak spot",
+    "02_carrier_sla_by_shipping_mode.md § Scheduled delivery days",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 9.4,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p04",
+   "category": "policy",
+   "question": "What penalty does a carrier pay if it misses its monthly on-time target by more than 10 percentage points?",
+   "answer": "If a carrier misses its monthly on-time target for a shipping mode by more than 10 percentage points, it pays a penalty of 6% of that month's freight spend for the mode [02_carrier_sla_by_shipping_mode.md § Carrier penalties].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "02_carrier_sla_by_shipping_mode.md § Carrier penalties",
+    "02_carrier_sla_by_shipping_mode.md § Scheduled delivery days",
+    "08_cancellations_and_fraud_review.md § Effect on delivery metrics",
+    "09_damaged_and_lost_shipments.md § Carrier claims"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 12.3,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p05",
+   "category": "policy",
+   "question": "Who owns a late-shipment case when an order is 4 or more days late?",
+   "answer": "When an order is 4 or more days late, the case is owned by the Logistics Duty Manager. A refund or credit review is automatically opened, and the customer will receive a call, not just an email. [01_late_shipment_escalation.md § Escalation tiers]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "01_late_shipment_escalation.md § Escalation tiers",
+    "01_late_shipment_escalation.md § Closing a case",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "04_customs_and_international_delays.md § Customer messaging"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 13.0,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p06",
+   "category": "policy",
+   "question": "How quickly must Customer Care contact the customer when an order is 1 day late?",
+   "answer": "According to ShipSense's policies, when an order is 1 day late, Customer Care must contact the customer within 4 business hours via email or SMS [06_customer_communication_standards.md § Response times]. Additionally, the case should be logged in the ticket system [01_late_shipment_escalation.md § Escalation tiers].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "06_customer_communication_standards.md § Response times",
+    "01_late_shipment_escalation.md § Escalation tiers",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "04_customs_and_international_delays.md § Customer messaging"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 14.7,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p07",
+   "category": "policy",
+   "question": "When is a shipment declared lost?",
+   "answer": "A shipment is declared lost when there has been no carrier scan for 10 business days after its scheduled delivery date. Before that, it is treated as late, not lost. [09_damaged_and_lost_shipments.md § When a shipment counts as lost]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "09_damaged_and_lost_shipments.md § When a shipment counts as lost",
+    "09_damaged_and_lost_shipments.md § Carrier claims",
+    "09_damaged_and_lost_shipments.md § Customer remedy for lost shipments",
+    "09_damaged_and_lost_shipments.md § Damaged on arrival"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 10.7,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p08",
+   "category": "policy",
+   "question": "Within how many days must customers report damage, and what do they need to include?",
+   "answer": "Customers must report damage within 7 days of delivery, including at least one photo. For damaged items under $100, a refund is issued without a return; items of $100 or more require return for inspection. [09_damaged_and_lost_shipments.md § Damaged on arrival]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "09_damaged_and_lost_shipments.md § Damaged on arrival",
+    "10_peak_season_and_weather.md § Customer messaging during events",
+    "06_customer_communication_standards.md § Response times",
+    "09_damaged_and_lost_shipments.md § Carrier claims"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 12.5,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p09",
+   "category": "policy",
+   "question": "When does peak season run?",
+   "answer": "Peak season runs from November 15 to January 10. During this period, carriers may take an extra day beyond the scheduled days without penalty, but delivery credits start only from the second day late. [10_peak_season_and_weather.md § Peak season]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "10_peak_season_and_weather.md § Peak season",
+    "10_peak_season_and_weather.md § Staffing",
+    "10_peak_season_and_weather.md § Severe weather",
+    "10_peak_season_and_weather.md § Customer messaging during events"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 10.7,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p10",
+   "category": "policy",
+   "question": "Which document does an international order above $800 need in addition to the commercial invoice and HS codes?",
+   "answer": "An international order above $800 needs a certificate of origin in addition to the commercial invoice and HS codes. [04_customs_and_international_delays.md § Required documents]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "04_customs_and_international_delays.md § Required documents",
+    "06_customer_communication_standards.md § Language",
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "11_corporate_account_sla.md § Upgrade eligibility"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 10.4,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p11",
+   "category": "policy",
+   "question": "How many extra business days of customs processing should we quote for orders to Brazil?",
+   "answer": "According to the policy, you should quote an extra 2 business days of customs processing for orders to Brazil. [04_customs_and_international_delays.md § Market-specific notes]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "04_customs_and_international_delays.md § Market-specific notes",
+    "04_customs_and_international_delays.md § Customer messaging",
+    "04_customs_and_international_delays.md § Required documents",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 10.2,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p12",
+   "category": "policy",
+   "question": "Who can approve upgrading an order to Same Day, and what is the maximum extra cost?",
+   "answer": "The Regional Operations Lead can approve upgrading an order to Same Day, with a maximum extra cost of $120 per order [07_shipping_mode_upgrade_policy.md § Approval limits]. For orders not meeting the Corporate segment criteria, the Logistics Duty Manager's approval is required for upgrades above this limit.",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "07_shipping_mode_upgrade_policy.md § Approval limits",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules",
+    "07_shipping_mode_upgrade_policy.md § When upgrades are allowed",
+    "11_corporate_account_sla.md § Upgrade eligibility"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 12.0,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p13",
+   "category": "policy",
+   "question": "How much credit does a Corporate customer get for an order that is 1 day late?",
+   "answer": "For a Corporate customer, if an order is 1 day late, they will receive 20% of the order's shipping charge as account credit, doubled due to their Corporate status. This amount is subject to a $250 cap per order. [03_refund_and_credit_policy.md § Credit amounts]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "11_corporate_account_sla.md § Enhanced credits",
+    "01_late_shipment_escalation.md § Escalation tiers"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 14.4,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p14",
+   "category": "policy",
+   "question": "How long does the Fraud Review team have to decide on a suspected-fraud order?",
+   "answer": "The Fraud Review team has 24 hours to decide on a suspected-fraud order: they must decide whether to release the order or cancel and refund it in full. [08_cancellations_and_fraud_review.md § Suspected fraud]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "08_cancellations_and_fraud_review.md § Suspected fraud",
+    "08_cancellations_and_fraud_review.md § Repeated cancellations",
+    "08_cancellations_and_fraud_review.md § Effect on delivery metrics",
+    "01_late_shipment_escalation.md § Escalation tiers"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 11.9,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p15",
+   "category": "policy",
+   "question": "Within how many business hours must we email the customer after an order is flagged high risk?",
+   "answer": "According to the policy [05_high_risk_order_handling.md § Required actions for high-risk orders], we must email the customer a realistic delivery window within 2 business hours of the order being flagged high risk.",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "10_peak_season_and_weather.md § Customer messaging during events",
+    "05_high_risk_order_handling.md § Model limits",
+    "01_late_shipment_escalation.md § Escalation tiers"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 11.5,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o01",
+   "category": "order",
+   "question": "What happened to order 62489?",
+   "answer": "For order 62489:\n- The order was shipped via Standard Class on 2017-07-06, 5 days after it was placed.\n- It was marked as late delivery, being 1 day late.\n- The model predicts a late delivery risk of 38.16%, which is below the threshold of 59.5%.\n- According to the policy, a shipment is declared lost when there has been no carrier scan for 10 business days after its scheduled delivery date. Before that, it is treated as late, not lost.\n- The order status is COMPLETE, and the customer has the option to choose either a free replacement shipped Same Day where available, or a full refund of the order including shipping.",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "09_damaged_and_lost_shipments.md § Customer remedy for lost shipments",
+    "08_cancellations_and_fraud_review.md § Suspected fraud",
+    "09_damaged_and_lost_shipments.md § When a shipment counts as lost",
+    "09_damaged_and_lost_shipments.md § Damaged on arrival"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 26.4,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o02",
+   "category": "order",
+   "question": "Was order 62478 delivered on time?",
+   "answer": "Order 62478 was delivered on time, as it was shipped on the scheduled date and the delivery status is \"Shipping on time\". The order was completed without any delays. The model predicts a late-delivery risk of 39.14%, which is below the threshold of 59.5%, indicating a low risk of late delivery. [02_carrier_sla_by_shipping_mode.md § Cut-off times] [03_refund_and_credit_policy.md § Who qualifies]",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "08_cancellations_and_fraud_review.md § Suspected fraud",
+    "10_peak_season_and_weather.md § Customer messaging during events"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 20.1,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o03",
+   "category": "order",
+   "question": "What is the model's late-delivery risk for order 62704, and is it flagged high risk?",
+   "answer": "The model's late-delivery risk for order 62704 is 0.9992, which is above the model's decision threshold of 0.595. This order is flagged as high risk [05_high_risk_order_handling.md § What \"high risk\" means].",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § What not to do",
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "05_high_risk_order_handling.md § What \"high risk\" means",
+    "01_late_shipment_escalation.md § Predicted-late orders"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 17.2,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o04",
+   "category": "order",
+   "question": "What is the status of order 62509?",
+   "answer": "I couldn't find order 62509 in the system. The policy mentions some actions for high-risk orders and details about a specific order, but it seems this order might not be in the shipped orders list. If you have more details or another order ID, please provide them.",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "05_high_risk_order_handling.md § Model limits",
+    "08_cancellations_and_fraud_review.md § Suspected fraud",
+    "04_customs_and_international_delays.md § Required documents"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 15.3,
+   "correct": false,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o05",
+   "category": "order",
+   "question": "What is the late-delivery risk of order 62489 according to the model?",
+   "answer": "The late-delivery risk of order 62489 according to the model is 0.3816, which is below the model's decision threshold of 0.595. Therefore, this order is not considered high risk.",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § What not to do",
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "09_damaged_and_lost_shipments.md § When a shipment counts as lost",
+    "05_high_risk_order_handling.md § What \"high risk\" means"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 15.5,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "m01",
+   "category": "mixed",
+   "question": "Order 62704 was delivered late. How many days late was it, and how much delivery credit does a Consumer customer get for that?",
+   "answer": "Order 62704 was delivered 1 day late. A Consumer customer who experiences a late delivery typically gets 10% of the order's shipping charge as account credit. For this order, that would be 10% of the shipping charge. The shipping charge for this order is part of the total order amount of $969.89. \n\nThe late delivery risk model indicates a very high risk with a probability of 0.9992, which is above the threshold of 0.595.",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "01_late_shipment_escalation.md § Escalation tiers",
+    "03_refund_and_credit_policy.md § How credits are issued"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 23.7,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "m02",
+   "category": "mixed",
+   "question": "Is order 62477 high risk according to the model, and what should we do for high-risk orders?",
+   "answer": "Order 62477 is not high risk according to the model, as its late probability is 0.406, which is below the model's decision threshold of 0.595 [05_high_risk_order_handling.md § What \"high risk\" means].\n\nFor orders that are high risk, the following actions should be taken:\n1. **Proactive notice:** Email the customer a realistic delivery window within 2 business hours of the order being placed.\n2. **Upgrade check:** If the order value is above $500 and it ships Standard Class, the Fulfilment Lead may upgrade it to Second Class at our cost (see Shipping Mode Upgrade Policy).\n3. **Tag the order:** Tag the order with HIGH_RISK in the order system so Customer Care sees it.\n\nThe model's limits should be considered: treat a high-risk flag as a reason to act early, not as a guarantee the order will be late [05_high_risk_order_handling.md § Model limits].",
+   "tools": [
+    "search_policy",
+    "lookup_shipment",
+    "predict_risk"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "05_high_risk_order_handling.md § What not to do",
+    "05_high_risk_order_handling.md § What \"high risk\" means",
+    "05_high_risk_order_handling.md § Model limits"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 33.3,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "u01",
+   "category": "unanswerable",
+   "question": "What is the policy on shipping live animals?",
+   "answer": "According to ShipSense's policies, shipping live animals is considered a high-risk order. Here are the key points:\n\n1. **Proactive Notice:** Email the customer a realistic delivery window within 2 business hours of the order being placed.\n2. **Upgrade Check:** If the order value is above $500 and it ships Standard Class, the Fulfilment Lead may upgrade it to Second Class at our cost (see Shipping Mode Upgrade Policy).\n3. **Tagging:** Tag the order with HIGH_RISK in the order system so Customer Care can monitor it.\n\nFor more detailed information, refer to the policy documents cited above: [05_high_risk_order_handling.md § Required actions for high-risk orders] and [07_shipping_mode_upgrade_policy.md § Approval limits, When upgrades are allowed].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "07_shipping_mode_upgrade_policy.md § Approval limits",
+    "09_damaged_and_lost_shipments.md § Damaged on arrival",
+    "07_shipping_mode_upgrade_policy.md § When upgrades are allowed"
+   ],
+   "invalid": [
+    "07_shipping_mode_upgrade_policy.md § Approval limits, When upgrades are allowed"
+   ],
+   "steps": 1,
+   "seconds": 24.4,
+   "correct": false,
+   "cites_expected_doc": false,
+   "invalid_citations": 1,
+   "required_tools_used": true
+  },
+  {
+   "id": "u02",
+   "category": "unanswerable",
+   "question": "What is the CEO's email address?",
+   "answer": "I don't have the CEO's email address in the policies. The provided information does not include contact details for the CEO. [11_corporate_account_sla.md § Dedicated contact] [03_refund_and_credit_policy.md § Corporate accounts]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "11_corporate_account_sla.md § Dedicated contact",
+    "06_customer_communication_standards.md § What we never share",
+    "11_corporate_account_sla.md § Monthly reporting",
+    "03_refund_and_credit_policy.md § Corporate accounts"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 9.6,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "u03",
+   "category": "unanswerable",
+   "question": "How much does a pallet of Standard Class freight to Brazil cost?",
+   "answer": "I couldn't find a specific cost for a pallet of Standard Class freight to Brazil in the policies. The policies do not provide pricing information for shipping modes. You may need to contact your Fulfilment Lead or Regional Operations Lead for a quote, as they have the authority to approve upgrades and may also provide pricing information. [07_shipping_mode_upgrade_policy.md § Approval limits] [04_customs_and_international_delays.md § Market-specific notes]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "07_shipping_mode_upgrade_policy.md § Approval limits",
+    "04_customs_and_international_delays.md § Market-specific notes",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules",
+    "09_damaged_and_lost_shipments.md § Damaged on arrival"
+   ],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 16.3,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  }
+ ],
+ "prefetch_off": [
+  {
+   "id": "p01",
+   "category": "policy",
+   "question": "How much delivery credit does a Consumer customer get when an order arrives 2 days late?",
+   "answer": "According to the policy, for a Consumer order that arrives 2 days late, the customer is entitled to 25% of the order's shipping charge as a credit. [03_refund_and_credit_policy.md § Credit amounts]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "04_customs_and_international_delays.md § Excused delays",
+    "03_refund_and_credit_policy.md § How credits are issued"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 13.2,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p02",
+   "category": "policy",
+   "question": "What is the maximum delivery credit per order before Finance approval is needed?",
+   "answer": "The maximum delivery credit per order before Finance approval is needed is $250. This cap applies to credits such as those for orders delivered 4 or more days late, where a full refund of the shipping charge and a $15 goodwill credit are issued [03_refund_and_credit_policy.md § Credit amounts].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "11_corporate_account_sla.md § Enhanced credits",
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 16.4,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p03",
+   "category": "policy",
+   "question": "How many scheduled days does Second Class shipping have?",
+   "answer": "According to the policy, Second Class shipping has a scheduled delivery of 2 days [02_carrier_sla_by_shipping_mode.md § Scheduled delivery days].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "02_carrier_sla_by_shipping_mode.md § Known weak spot",
+    "02_carrier_sla_by_shipping_mode.md § Scheduled delivery days",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 11.9,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p04",
+   "category": "policy",
+   "question": "What penalty does a carrier pay if it misses its monthly on-time target by more than 10 percentage points?",
+   "answer": "If a carrier misses its monthly on-time target for a shipping mode by more than 10 percentage points, it pays a penalty of 6% of that month's freight spend for the mode [02_carrier_sla_by_shipping_mode.md § Carrier penalties].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "02_carrier_sla_by_shipping_mode.md § Carrier penalties",
+    "08_cancellations_and_fraud_review.md § Effect on delivery metrics",
+    "02_carrier_sla_by_shipping_mode.md § Scheduled delivery days",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 16.1,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p05",
+   "category": "policy",
+   "question": "Who owns a late-shipment case when an order is 4 or more days late?",
+   "answer": "When an order is 4 or more days late, the case is owned by the Logistics Duty Manager. A refund or credit review is automatically opened, and the customer will receive a call, not just an email. [01_late_shipment_escalation.md § Escalation tiers]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "01_late_shipment_escalation.md § Escalation tiers",
+    "01_late_shipment_escalation.md § Closing a case",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "04_customs_and_international_delays.md § Customer messaging"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 18.1,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p06",
+   "category": "policy",
+   "question": "How quickly must Customer Care contact the customer when an order is 1 day late?",
+   "answer": "According to the policy, when an order is 1 day late, the Customer Care agent assigned to the order must contact the customer within 4 business hours and log the case in the ticket system [01_late_shipment_escalation.md § Escalation tiers].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "01_late_shipment_escalation.md § Escalation tiers",
+    "06_customer_communication_standards.md § Response times",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "02_carrier_sla_by_shipping_mode.md § Scheduled delivery days"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 16.6,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p07",
+   "category": "policy",
+   "question": "When is a shipment declared lost?",
+   "answer": "A shipment is declared lost when there has been no carrier scan for 10 business days after its scheduled delivery date. Before that, it is treated as late, not lost. [09_damaged_and_lost_shipments.md § When a shipment counts as lost]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "09_damaged_and_lost_shipments.md § When a shipment counts as lost",
+    "09_damaged_and_lost_shipments.md § Carrier claims",
+    "09_damaged_and_lost_shipments.md § Customer remedy for lost shipments",
+    "09_damaged_and_lost_shipments.md § Damaged on arrival"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 13.5,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p08",
+   "category": "policy",
+   "question": "Within how many days must customers report damage, and what do they need to include?",
+   "answer": "Customers must report damage within 7 days of delivery, including at least one photo. For items valued at $100 or more, a return for inspection is required. [09_damaged_and_lost_shipments.md § Damaged on arrival]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "09_damaged_and_lost_shipments.md § Damaged on arrival",
+    "09_damaged_and_lost_shipments.md § Carrier claims",
+    "09_damaged_and_lost_shipments.md § Customer remedy for lost shipments",
+    "10_peak_season_and_weather.md § Customer messaging during events"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 12.8,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p09",
+   "category": "policy",
+   "question": "When does peak season run?",
+   "answer": "I don't know the specific dates for peak season from our policies. Can you provide more context or specify which product or service you're asking about? Peak season can vary by region and product.",
+   "tools": [],
+   "sources": [],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 4.7,
+   "correct": false,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p10",
+   "category": "policy",
+   "question": "Which document does an international order above $800 need in addition to the commercial invoice and HS codes?",
+   "answer": "An international order above $800 in addition to the commercial invoice and HS codes needs a certificate of origin. [04_customs_and_international_delays.md § Required documents]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "04_customs_and_international_delays.md § Required documents",
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "04_customs_and_international_delays.md § Market-specific notes",
+    "04_customs_and_international_delays.md § Scope"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 13.1,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p11",
+   "category": "policy",
+   "question": "How many extra business days of customs processing should we quote for orders to Brazil?",
+   "answer": "According to the policy, you should quote an extra 2 business days of customs processing for orders to Brazil. [04_customs_and_international_delays.md § Market-specific notes]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "04_customs_and_international_delays.md § Market-specific notes",
+    "04_customs_and_international_delays.md § Customer messaging",
+    "04_customs_and_international_delays.md § Excused delays",
+    "04_customs_and_international_delays.md § Required documents"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 12.4,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p12",
+   "category": "policy",
+   "question": "Who can approve upgrading an order to Same Day, and what is the maximum extra cost?",
+   "answer": "The Regional Operations Lead can approve upgrading an order to Same Day shipping. The maximum extra cost per order for this upgrade is $120 [07_shipping_mode_upgrade_policy.md § Approval limits].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "07_shipping_mode_upgrade_policy.md § Approval limits",
+    "07_shipping_mode_upgrade_policy.md § When upgrades are allowed",
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules",
+    "07_shipping_mode_upgrade_policy.md § Record keeping"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 12.5,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p13",
+   "category": "policy",
+   "question": "How much credit does a Corporate customer get for an order that is 1 day late?",
+   "answer": "A Corporate customer who receives an order 1 day late will get 20% of the order's shipping charge as account credit, according to the Corporate Account SLA [11_corporate_account_sla.md § Enhanced credits]. Credits are capped at $250 per order [03_refund_and_credit_policy.md § Credit amounts].",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "03_refund_and_credit_policy.md § Credit amounts",
+    "03_refund_and_credit_policy.md § Who qualifies",
+    "11_corporate_account_sla.md § Enhanced credits",
+    "03_refund_and_credit_policy.md § Corporate accounts"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 16.4,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p14",
+   "category": "policy",
+   "question": "How long does the Fraud Review team have to decide on a suspected-fraud order?",
+   "answer": "The Fraud Review team has 24 hours to decide on a suspected-fraud order: they must decide whether to release the order or cancel and refund it in full. [08_cancellations_and_fraud_review.md § Suspected fraud]",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "08_cancellations_and_fraud_review.md § Suspected fraud",
+    "08_cancellations_and_fraud_review.md § Repeated cancellations",
+    "08_cancellations_and_fraud_review.md § Effect on delivery metrics",
+    "01_late_shipment_escalation.md § Escalation tiers"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 14.1,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "p15",
+   "category": "policy",
+   "question": "Within how many business hours must we email the customer after an order is flagged high risk?",
+   "answer": "According to the policy [05_high_risk_order_handling.md § Required actions for high-risk orders], we must email the customer a realistic delivery window within 2 business hours of the order being flagged high risk.",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "05_high_risk_order_handling.md § Required actions for high-risk orders",
+    "05_high_risk_order_handling.md § Model limits",
+    "05_high_risk_order_handling.md § What not to do",
+    "01_late_shipment_escalation.md § Predicted-late orders"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 13.2,
+   "correct": true,
+   "cites_expected_doc": true,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o01",
+   "category": "order",
+   "question": "What happened to order 62489?",
+   "answer": "The order shipped on 2017-07-06, 5 days after it was placed. The delivery was late by 1 day. The order status is COMPLETE and the delivery status is Late delivery. The order was shipped via Standard Class from Magdeburg, Alemania to Europe, for a total of 4 items worth 1049.90.",
+   "tools": [
+    "lookup_shipment"
+   ],
+   "sources": [],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 14.5,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o02",
+   "category": "order",
+   "question": "Was order 62478 delivered on time?",
+   "answer": "Order 62478 was delivered on time. It was shipped using Standard Class and was scheduled and in reality it took 4 days to deliver, which is on time. [01_shipping_policy.md § Standard Class]",
+   "tools": [
+    "lookup_shipment"
+   ],
+   "sources": [],
+   "invalid": [
+    "01_shipping_policy.md § Standard Class"
+   ],
+   "steps": 2,
+   "seconds": 11.0,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 1,
+   "required_tools_used": true
+  },
+  {
+   "id": "o03",
+   "category": "order",
+   "question": "What is the model's late-delivery risk for order 62704, and is it flagged high risk?",
+   "answer": "The model's late-delivery risk for order 62704 is 0.9992, and it is flagged as high risk.",
+   "tools": [
+    "predict_risk"
+   ],
+   "sources": [],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 8.1,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o04",
+   "category": "order",
+   "question": "What is the status of order 62509?",
+   "answer": "The status of order 62509 is CANCELED. The order was shipped using Standard Class and was scheduled to take 4 days, but it was canceled during shipping.",
+   "tools": [
+    "lookup_shipment"
+   ],
+   "sources": [],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 9.4,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "o05",
+   "category": "order",
+   "question": "What is the late-delivery risk of order 62489 according to the model?",
+   "answer": "The late-delivery risk for order 62489 is 0.3816, which is below the threshold of 0.595, so it is not considered a late risk.",
+   "tools": [
+    "predict_risk"
+   ],
+   "sources": [],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 9.5,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "m01",
+   "category": "mixed",
+   "question": "Order 62704 was delivered late. How many days late was it, and how much delivery credit does a Consumer customer get for that?",
+   "answer": "The order was delivered 1 day late. A Consumer customer typically gets a 10% delivery credit for late deliveries [03_refund_and_credit_policy.md § Late delivery credits].",
+   "tools": [
+    "lookup_shipment"
+   ],
+   "sources": [],
+   "invalid": [
+    "03_refund_and_credit_policy.md § Late delivery credits"
+   ],
+   "steps": 2,
+   "seconds": 10.0,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 1,
+   "required_tools_used": true
+  },
+  {
+   "id": "m02",
+   "category": "mixed",
+   "question": "Is order 62477 high risk according to the model, and what should we do for high-risk orders?",
+   "answer": "Order 62477 is not considered high risk according to the model, as its late probability is 0.406, which is below the threshold of 0.595.\n\nFor high-risk orders, the policy states that we should proactively communicate with the customer and expedite the shipment if possible. [03_shipment_expedition_policy.md § Expedited shipping procedures]",
+   "tools": [
+    "predict_risk"
+   ],
+   "sources": [],
+   "invalid": [
+    "03_shipment_expedition_policy.md § Expedited shipping procedures"
+   ],
+   "steps": 2,
+   "seconds": 13.8,
+   "correct": false,
+   "cites_expected_doc": false,
+   "invalid_citations": 1,
+   "required_tools_used": true
+  },
+  {
+   "id": "u01",
+   "category": "unanswerable",
+   "question": "What is the policy on shipping live animals?",
+   "answer": "There is no specific policy found regarding the shipping of live animals. However, here are some relevant policies:\n\n- Customers must report damage within 7 days of delivery, with at least one photo. Damaged items under $100 are refunded without a return; items of $100 or more must be returned for inspection. [09_damaged_and_lost_shipments.md § Damaged on arrival]\n- Orders placed before 14:00 local warehouse time ship the same day. Orders placed after 14:00 are treated as placed the next business day for scheduling purposes. [02_carrier_sla_by_shipping_mode.md § Cut-off times]\n- Operations files a claim against the carrier within 30 days of the shipment being declared lost or the damage being reported. Claims over $1000 require the Carrier Management team's sign-off. [09_damaged_and_lost_shipments.md § Carrier claims]\n- A shipment is declared lost when there has been no carrier scan for 10 business days after its scheduled delivery date. Before that, it is treated as late, not lost. [09_damaged_and_lost_shipments.md § When a shipment counts as lost]\n\nFor specific policies related to live animals, please refer to the company's internal documentation or contact the operations team directly.",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "09_damaged_and_lost_shipments.md § Damaged on arrival",
+    "02_carrier_sla_by_shipping_mode.md § Cut-off times",
+    "09_damaged_and_lost_shipments.md § Carrier claims",
+    "09_damaged_and_lost_shipments.md § When a shipment counts as lost"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 37.6,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "u02",
+   "category": "unanswerable",
+   "question": "What is the CEO's email address?",
+   "answer": "I don't know, as the information about the CEO's email address is not contained in the policies, procedures, or order data available to me.",
+   "tools": [],
+   "sources": [],
+   "invalid": [],
+   "steps": 1,
+   "seconds": 3.7,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  },
+  {
+   "id": "u03",
+   "category": "unanswerable",
+   "question": "How much does a pallet of Standard Class freight to Brazil cost?",
+   "answer": "The policy documents do not provide specific cost information for pallets of Standard Class freight to Brazil. However, they do mention some relevant points:\n\n- For orders to Brazil, an extra 2 business days of customs processing should be allowed when quoting delivery dates [04_customs_and_international_delays.md § Market-specific notes].\n- There are no specific cost details provided for Standard Class shipping to Brazil in the policies.\n\nFor more detailed cost information, you might need to consult the pricing section of the ShipSense Logistics website or contact the pricing team directly.",
+   "tools": [
+    "search_policy"
+   ],
+   "sources": [
+    "07_shipping_mode_upgrade_policy.md § Eligibility rules",
+    "07_shipping_mode_upgrade_policy.md § Approval limits",
+    "04_customs_and_international_delays.md § Market-specific notes",
+    "05_high_risk_order_handling.md § Required actions for high-risk orders"
+   ],
+   "invalid": [],
+   "steps": 2,
+   "seconds": 24.2,
+   "correct": true,
+   "cites_expected_doc": false,
+   "invalid_citations": 0,
+   "required_tools_used": true
+  }
+ ]
+}

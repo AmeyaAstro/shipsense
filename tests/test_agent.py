@@ -74,7 +74,9 @@ def test_predict_risk_by_id_matches_model(env):
 
 def test_predict_risk_errors_are_returned_not_raised(env):
     t = env["tools"]
-    assert "not found among shipped" in t.predict_risk(order_id=env["canceled_id"])["error"]
+    canceled = t.predict_risk(order_id=env["canceled_id"])  # exists, never shipped: explain, don't say "not found"
+    assert canceled["order_status"] == "CANCELED" and "never shipped" in canceled["note"]
+    assert "not found" in t.predict_risk(order_id=999_999)["error"]
     assert "invalid order fields" in t.predict_risk(order={**VALID, "shipping_mode": "Rocket"})["error"]
     assert 0 <= t.predict_risk(order=VALID)["late_probability"] <= 1
     assert "unknown tool" in t.execute("drop_tables", {})["error"]

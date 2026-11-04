@@ -1,4 +1,4 @@
-.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features rag-index copilot-data
+.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features rag-index copilot-data rag-eval
 
 # Interpreter used to create the venv (needs 3.10+; macOS's /usr/bin/python3 is 3.9).
 # Override like: make setup PYTHON=/path/to/python3.11
@@ -48,3 +48,6 @@ rag-index:        ## chunk + embed knowledge/*.md into a FAISS index (data/proce
 
 copilot-data:     ## build the shipments table + policy index the copilot needs (after `make data`)
 	$(VENV_BIN)/python -m shipsense.shipments && $(VENV_BIN)/python -m shipsense.rag
+
+rag-eval:         ## score the copilot on eval/questions.jsonl -> reports/rag_eval.md (Ollama must be running)
+	$(VENV_BIN)/python eval/run_eval.py
