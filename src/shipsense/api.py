@@ -5,6 +5,9 @@ production model (HistGradientBoosting pipeline) and the threshold tuned on the
 validation set, validates every request with Pydantic, and builds features with
 the same code as training.
 
+POST /ask (Week 3) answers ops questions with the RAG + tools copilot. It is built lazily on the
+first question, so /predict works without the copilot's extra dependencies (e.g. in Docker).
+
 Run:  make serve   (then open http://127.0.0.1:8000/docs for interactive docs)
 Paths can be overridden with env vars SHIPSENSE_MODEL_PATH / SHIPSENSE_METRICS_PATH.
 """
@@ -13,6 +16,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
@@ -20,10 +24,10 @@ from typing import Literal
 
 import joblib
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, model_validator
 
-from shipsense.config import CATEGORICAL, DAYS_SCHEDULED_BY_MODE, MODELS_DIR, NUMERIC, REPORTS_DIR
+from shipsense.config import CATEGORICAL, DAYS_SCHEDULED_BY_MODE, DB_PATH, MODELS_DIR, NUMERIC, REPORTS_DIR
 from shipsense.data import add_calendar_features
 
 MODEL_NAME = "gradient_boosting"
@@ -72,6 +76,25 @@ class BatchResponse(BaseModel):
     predictions: list[Prediction]
 
 
+class AskRequest(BaseModel):
+    question: str = Field(min_length=3, max_length=1000,
+                          examples=["How much credit is owed if an order is 2 days late?"])
+
+
+class ToolCallOut(BaseModel):
+    name: str
+    arguments: dict
+
+
+class AskResponse(BaseModel):
+    answer: str
+    sources: list[str]          # policy passages retrieved (doc § section)
+    invalid_citations: list[str]  # cited in the answer but NOT retrieved, i.e. made up by the LLM
+    tool_calls: list[ToolCallOut]
+    steps: int
+    llm_model: str
+
+
 def to_features(orders: list[Order]) -> pd.DataFrame:
     """Turn validated orders into the exact feature columns the model was trained on."""
     df = pd.DataFrame([o.model_dump() for o in orders])
@@ -85,8 +108,23 @@ def file_version(path: Path) -> str:
     return f"{MODEL_NAME}-{hashlib.sha256(path.read_bytes()).hexdigest()[:12]}"
 
 
-def create_app(model_path: Path | None = None, metrics_path: Path | None = None) -> FastAPI:
-    """Build the app. Tests pass small model/metrics files; production uses the defaults."""
+def build_default_agent(state: dict):
+    """Real copilot: MiniLM + FAISS index, SQLite tools, LLM from env (Ollama by default)."""
+    from shipsense.agent import Agent  # lazy: avoids a circular import and heavy deps at startup
+    from shipsense.llm import get_llm
+    from shipsense.rag import INDEX_DIR, PolicyIndex, SentenceTransformerEmbedder
+    from shipsense.tools import ShipSenseTools
+
+    if not (INDEX_DIR / "index.faiss").exists():
+        raise FileNotFoundError("policy index missing: run `make copilot-data`")
+    index = PolicyIndex.load(SentenceTransformerEmbedder(), INDEX_DIR)
+    tools = ShipSenseTools(DB_PATH, state["model"], state["threshold"], state["version"], index)
+    return Agent(get_llm(), tools)
+
+
+def create_app(model_path: Path | None = None, metrics_path: Path | None = None,
+               agent_factory: Callable[[dict], object] | None = None) -> FastAPI:
+    """Build the app. Tests pass small model/metrics files and a fake agent; production uses the defaults."""
     model_path = Path(model_path or os.getenv("SHIPSENSE_MODEL_PATH", DEFAULT_MODEL_PATH))
     metrics_path = Path(metrics_path or os.getenv("SHIPSENSE_METRICS_PATH", DEFAULT_METRICS_PATH))
     state: dict = {}
@@ -101,8 +139,8 @@ def create_app(model_path: Path | None = None, metrics_path: Path | None = None)
         yield
         state.clear()
 
-    app = FastAPI(title="ShipSense", version="0.2.0", lifespan=lifespan,
-                  description="Late-delivery risk scoring for shipped orders.")
+    app = FastAPI(title="ShipSense", version="0.3.0", lifespan=lifespan,
+                  description="Late-delivery risk scoring and an ops copilot (fictional policies).")
 
     def predict_many(orders: list[Order]) -> list[Prediction]:
         proba = state["model"].predict_proba(to_features(orders))[:, 1]
@@ -121,6 +159,21 @@ def create_app(model_path: Path | None = None, metrics_path: Path | None = None)
     @app.post("/predict/batch", response_model=BatchResponse)
     def predict_batch(req: BatchRequest) -> BatchResponse:
         return BatchResponse(predictions=predict_many(req.orders))
+
+    @app.post("/ask", response_model=AskResponse)
+    def ask(req: AskRequest) -> AskResponse:
+        from shipsense.llm import LLMUnavailable
+
+        try:
+            if "agent" not in state:
+                state["agent"] = (agent_factory or build_default_agent)(state)
+            result = state["agent"].run(req.question)
+        except (FileNotFoundError, LLMUnavailable) as e:
+            raise HTTPException(status_code=503, detail=f"copilot unavailable: {e}") from e
+        return AskResponse(answer=result.answer, sources=result.sources, steps=result.steps,
+                           invalid_citations=result.invalid_citations,
+                           tool_calls=[ToolCallOut(name=t.name, arguments=t.arguments) for t in result.tool_calls],
+                           llm_model=state["agent"].llm.model)
 
     return app
 
