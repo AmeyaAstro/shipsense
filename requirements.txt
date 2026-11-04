@@ -16,3 +16,4 @@ ruff>=0.5
 pyspark>=3.5
 sentence-transformers>=3.0
 faiss-cpu>=1.8
+streamlit>=1.35
