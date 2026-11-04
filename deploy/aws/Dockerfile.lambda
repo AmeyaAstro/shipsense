@@ -1,0 +1,26 @@
+# ShipSense API on AWS Lambda (container image, arm64). Same app as ../../Dockerfile, plus:
+#  - AWS Lambda Web Adapter: lets Lambda run this ordinary uvicorn server unchanged
+#  - boto3, to download the model from S3 at startup (SHIPSENSE_MODEL_S3_URI)
+#  - NO model baked in: shipping a new model = uploading to S3, not rebuilding this image
+# Built and pushed by deploy/aws/deploy.sh.
+FROM public.ecr.aws/docker/library/python:3.11-slim
+
+# The adapter is a Lambda "extension": it starts the web server and forwards Lambda events as HTTP requests.
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.9.1 /lambda-adapter /opt/extensions/lambda-adapter
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app/src \
+    AWS_LWA_PORT=8000 \
+    AWS_LWA_READINESS_CHECK_PATH=/health
+
+WORKDIR /app
+COPY requirements-serve.txt .
+RUN pip install --no-cache-dir -r requirements-serve.txt boto3==1.43.123
+
+COPY src/ src/
+COPY reports/metrics.json reports/
+RUN chmod -R a+rX,go-w /app
+
+# Lambda's filesystem is read-only except /tmp, which is where the model is downloaded.
+CMD ["uvicorn", "shipsense.api:app", "--host", "0.0.0.0", "--port", "8000"]

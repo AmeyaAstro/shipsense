@@ -10,6 +10,8 @@ first question, so /predict works without the copilot's extra dependencies (e.g.
 
 Run:  make serve   (then open http://127.0.0.1:8000/docs for interactive docs)
 Paths can be overridden with env vars SHIPSENSE_MODEL_PATH / SHIPSENSE_METRICS_PATH.
+On AWS (Week 4) set SHIPSENSE_MODEL_S3_URI=s3://bucket/key: the model is downloaded to /tmp at startup,
+so a new model is an S3 upload, not a new container image.
 """
 from __future__ import annotations
 
@@ -108,6 +110,18 @@ def file_version(path: Path) -> str:
     return f"{MODEL_NAME}-{hashlib.sha256(path.read_bytes()).hexdigest()[:12]}"
 
 
+def download_from_s3(uri: str, dest_dir: Path = Path("/tmp")) -> Path:
+    """Fetch s3://bucket/key to dest_dir. boto3 is imported lazily: only the AWS image needs it."""
+    bucket, _, key = uri.removeprefix("s3://").partition("/")
+    if not uri.startswith("s3://") or not bucket or not key:  # fail fast on bad config, before importing boto3
+        raise ValueError(f"expected s3://bucket/key, got {uri!r}")
+    import boto3
+
+    dest = dest_dir / Path(key).name
+    boto3.client("s3").download_file(bucket, key, str(dest))
+    return dest
+
+
 def build_default_agent(state: dict):
     """Real copilot: MiniLM + FAISS index, SQLite tools, LLM from env (Ollama by default)."""
     from shipsense.agent import Agent  # lazy: avoids a circular import and heavy deps at startup
@@ -132,10 +146,12 @@ def create_app(model_path: Path | None = None, metrics_path: Path | None = None,
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         # Load once at startup (not per request). joblib uses pickle, so only load our own files.
-        state["model"] = joblib.load(model_path)
+        s3_uri = os.getenv("SHIPSENSE_MODEL_S3_URI")
+        model_file = download_from_s3(s3_uri) if s3_uri else model_path
+        state["model"] = joblib.load(model_file)
         metrics = json.loads(metrics_path.read_text())
         state["threshold"] = metrics["models"][MODEL_NAME]["val"]["threshold"]
-        state["version"] = file_version(model_path)
+        state["version"] = file_version(model_file)
         yield
         state.clear()
 

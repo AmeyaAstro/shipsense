@@ -1,5 +1,6 @@
 """API tests on a tiny model trained from synthetic data (no CSV or real model needed in CI)."""
 import json
+from pathlib import Path
 
 import joblib
 import pytest
@@ -90,3 +91,28 @@ def test_batch_matches_single_predictions(client):
 
 def test_empty_batch_returns_422(client):
     assert client.post("/predict/batch", json={"orders": []}).status_code == 422
+
+
+def test_model_can_come_from_s3(artifacts, monkeypatch):
+    """With SHIPSENSE_MODEL_S3_URI set, the app loads the downloaded file (S3 faked: no AWS needed)."""
+    import shipsense.api as api
+
+    _, model_path, metrics_path = artifacts
+    asked = []
+
+    def fake_download(uri):
+        asked.append(uri)
+        return model_path
+
+    monkeypatch.setenv("SHIPSENSE_MODEL_S3_URI", "s3://bucket/models/gb.joblib")
+    monkeypatch.setattr(api, "download_from_s3", fake_download)
+    with TestClient(create_app(Path("/nonexistent.joblib"), metrics_path)) as c:
+        assert c.get("/health").status_code == 200
+    assert asked == ["s3://bucket/models/gb.joblib"]
+
+
+def test_bad_s3_uri_is_rejected():
+    from shipsense.api import download_from_s3
+
+    with pytest.raises(ValueError):
+        download_from_s3("s3://bucket-only")
