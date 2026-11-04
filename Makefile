@@ -1,4 +1,4 @@
-.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features rag-index copilot-data rag-eval
+.PHONY: setup data train test eda all mlflow-ui serve docker-build docker-run spark-features rag-index copilot-data rag-eval drift
 
 # Interpreter used to create the venv (needs 3.10+; macOS's /usr/bin/python3 is 3.9).
 # Override like: make setup PYTHON=/path/to/python3.11
@@ -51,3 +51,7 @@ copilot-data:     ## build the shipments table + policy index the copilot needs 
 
 rag-eval:         ## score the copilot on eval/questions.jsonl -> reports/rag_eval.md (Ollama must be running)
 	$(VENV_BIN)/python eval/run_eval.py
+
+MONTH ?= 2018-01
+drift:            ## PSI drift report for MONTH vs training (ARGS=--simulate-shift for a synthetic shift)
+	$(VENV_BIN)/python -m shipsense.drift --month $(MONTH) $(ARGS)
