@@ -45,7 +45,7 @@ LLMs/RAG/agents, AWS, monitoring. Every finished milestone becomes resume bullet
    a test or script asserting it matches the SQL output on a sample. (Requires Java on the Mac — check `java -version`; if missing, tell Ameya how to install, e.g. `brew install openjdk@17`.)
 7. Update README (architecture diagram in Mermaid, run instructions) + `docs/week2_walkthrough.md`.
 
-## Week 3 — RAG + LLM agent
+## Week 3 — DONE (RAG + agent + /ask + eval: 24/25 prefetch vs 23/25; 53 tests; see docs/week3_walkthrough.md)
 1. Write ~8–12 short **synthetic** shipping SOP/policy markdown docs in `knowledge/` (clearly labelled
    fictional: late-shipment escalation, carrier SLAs by mode, refund/credit policy, customs delays, etc.).
 2. RAG: chunk → embed with a Hugging Face sentence-transformer (`all-MiniLM-L6-v2`) → vector store

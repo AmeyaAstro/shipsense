@@ -3,12 +3,13 @@
 [![CI](https://github.com/AmeyaAstro/shipsense/actions/workflows/ci.yml/badge.svg)](https://github.com/AmeyaAstro/shipsense/actions/workflows/ci.yml)
 
 Predict, **at the moment an order is placed**, whether it will arrive late, serve that model as a
-tested, containerised API, and (in later milestones) wrap it in an LLM agent that answers operations
-questions using the model plus company shipping policies.
+tested, containerised API, and answer operations questions with an LLM copilot that combines the
+model, a shipment database and (fictional) company shipping policies, with citations.
 
-> Status: **Week 2 of 4 complete** — Week 1 built the leakage-safe data pipeline and models;
+> Status: **Week 3 of 4 complete** — Week 1 built the leakage-safe data pipeline and models;
 > Week 2 added MLflow tracking, a FastAPI service, Docker, GitHub Actions CI and a PySpark
-> feature job verified against the SQL.
+> feature job verified against the SQL; Week 3 added a RAG + tool-calling copilot (`POST /ask`)
+> and an evaluation harness.
 
 ## Architecture
 
@@ -24,6 +25,12 @@ flowchart LR
     ART --> API["FastAPI<br/>/health · /predict · /predict/batch"]
     API --> IMG["Docker image<br/>python:3.11-slim, non-root"]
     PUSH["git push / PR"] --> CI["GitHub Actions<br/>ruff + pytest + Java 17"]
+    KB["knowledge/*.md<br/>11 fictional policies"] --> IDX[("MiniLM + FAISS<br/>46 chunks")]
+    ASK["POST /ask"] --> AG["Agent loop<br/>qwen2.5:7b via Ollama"]
+    AG -- search_policy --> IDX
+    AG -- lookup_shipment --> SHIP[("SQLite<br/>shipments")]
+    AG -- predict_risk --> ART
+    API --- ASK
 ```
 
 ## Results (test set: Jul 2017 – Jan 2018, 13,071 orders, 57% late)
@@ -50,6 +57,12 @@ label (see `notebooks/01_eda.ipynb`).
 **Serving** (Docker container on an Apple M4, localhost): `/predict` median 8.2 ms, p95 14.3 ms over
 500 sequential requests; `/predict/batch` scores 1,000 orders in a median 29 ms.
 
+**Ops copilot** (25-question eval, `qwen2.5:7b` locally; full report and caveats in
+[`reports/rag_eval.md`](reports/rag_eval.md)): retrieval hit@4 100% (hit@1 82%); answers correct
+24/25 with the default deterministic tool prefetch vs 23/25 when the model decides alone, with 1 vs 3
+answers containing an invented citation; median ~12 s per question. The one fix between eval runs was
+found using the same questions, so 24/25 is optimistic.
+
 ## Key design decisions
 
 1. **Order-level, not item-level.** The CSV has 180k item rows but only 65k orders, and all items in
@@ -63,6 +76,10 @@ label (see `notebooks/01_eda.ipynb`).
    skew; a test checks the API's score equals the pipeline's.
 7. **Two feature engines, one answer:** the PySpark job reproduces the SQL table exactly on all
    62,897 orders, and a CI test keeps them in sync.
+8. **Copilot guardrails from observed failures:** with a 7B model, the agent prefetches policy passages
+   (and order facts when an order id is mentioned) and flags any citation that wasn't retrieved.
+9. **Testable LLM code:** the LLM and the embedder are injected, so 28 copilot tests run offline with a
+   scripted fake LLM; CI needs no Ollama, model download or dataset.
 
 ## Project layout
 
@@ -76,8 +93,15 @@ src/shipsense/torch_model.py    PyTorch embeddings + MLP with early stopping
 src/shipsense/evaluate.py       shared metrics + threshold selection
 src/shipsense/train.py          trains everything, writes reports/, logs to MLflow
 src/shipsense/tracking.py       MLflow setup and per-model logging
-src/shipsense/api.py            FastAPI service with Pydantic validation
-tests/                          25 pytest tests on synthetic data (pipeline, API, Spark parity)
+src/shipsense/api.py            FastAPI service with Pydantic validation (+ POST /ask)
+src/shipsense/rag.py            chunking, MiniLM embeddings, FAISS index, cited search
+src/shipsense/llm.py            provider-agnostic LLM client (Ollama default, optional Anthropic)
+src/shipsense/tools.py          search_policy / lookup_shipment / predict_risk
+src/shipsense/agent.py          tool-calling loop with prefetch + citation check
+src/shipsense/shipments.py      order outcome table for lookups (never a model input)
+knowledge/                      11 fictional shipping-policy docs
+eval/                           25-question copilot eval set + scorer
+tests/                          53 pytest tests, all offline (pipeline, API, Spark, RAG, LLM, agent)
 Dockerfile, docker-compose.yml  API container (requirements-serve.txt = runtime deps only)
 .github/workflows/ci.yml        lint + tests on every push / PR
 reports/                        metrics.json, model_comparison.md
@@ -96,6 +120,8 @@ make mlflow-ui        # compare training runs at http://127.0.0.1:5000
 make serve            # API at http://127.0.0.1:8000/docs
 make docker-build && make docker-run         # same API in a container
 make spark-features ARGS=--compare           # PySpark features, checked against SQL
+make copilot-data && ollama pull qwen2.5:7b  # copilot: shipments table + policy index + local LLM
+make rag-eval                                # ~20 min: writes reports/rag_eval.md
 ```
 
 Example request:
@@ -113,7 +139,7 @@ curl -X POST http://127.0.0.1:8000/predict -H "Content-Type: application/json" -
 
 - [x] **Week 1** — EDA, SQL features, baselines, PyTorch model, honest comparison
 - [x] **Week 2** — MLflow tracking, FastAPI service, Docker, GitHub Actions CI, PySpark feature job
-- [ ] **Week 3** — RAG over shipping SOPs + LLM agent with tools (`predict_risk`, `lookup_shipment`, `search_policy`), eval set
+- [x] **Week 3** — RAG over shipping SOPs + LLM agent with tools (`predict_risk`, `lookup_shipment`, `search_policy`), eval set
 - [ ] **Week 4** — AWS deployment, drift monitoring, demo video
 
 Data: [DataCo Smart Supply Chain for Big Data Analysis](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis) (Kaggle). Not redistributed in this repo.
