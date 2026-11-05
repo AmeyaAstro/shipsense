@@ -15,7 +15,7 @@ LLMs/RAG/agents, AWS, monitoring. Every finished milestone becomes resume bullet
   secrets. Never commit data, `.env`, API keys, or model binaries.
 
 ## Repo / environment
-- GitHub: https://github.com/AmeyaAstro/shipsense (not pushed yet — see `docs/push_to_github.md`)
+- GitHub: https://github.com/AmeyaAstro/shipsense (pushed; CI green)
 - Local: `~/Desktop/Claude Job Hunt/Skill gap project shipsense/shipsense_week1/` (this folder is the repo root)
 - Dataset: DataCo Smart Supply Chain (Kaggle), at `../archive/DataCoSupplyChainDataset.csv`
   (Latin-1 encoded, 180,519 item rows). `config.py` finds it automatically.
@@ -59,7 +59,7 @@ LLMs/RAG/agents, AWS, monitoring. Every finished milestone becomes resume bullet
    (exact-match / keyword or LLM-as-judge); write results to `reports/rag_eval.md`. Report honestly.
 6. `docs/week3_walkthrough.md`.
 
-## Week 4 — deploy + monitor + showcase
+## Week 4 — DONE (PSI drift, Streamlit, AWS Lambda deploy measured, final docs; 61 tests; see docs/week4_walkthrough.md, docs/resume_bullets.md)
 1. AWS free tier (ask before creating anything; give Ameya console steps where he must click):
    model artifact in S3; container on ECR → App Runner or ECS Fargate (or Lambda container if cheaper).
    Include teardown instructions and a cost note.
