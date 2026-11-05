@@ -7,7 +7,7 @@ don't fit a free-tier setup. Run it locally.
 ```
 models/gradient_boosting.joblib --upload--> S3 (private bucket, key includes the model hash)
 deploy/aws/Dockerfile.lambda --build arm64--> ECR (private repo, last 3 images kept)
-Lambda (container image, arm64, 1 GB) --reads model at cold start--> S3
+Lambda (container image, arm64, 2 GB) --reads model at cold start--> S3
 Function URL (public HTTPS) --> Lambda Web Adapter --> uvicorn --> FastAPI
 ```
 
@@ -38,8 +38,12 @@ Function URL (public HTTPS) --> Lambda Web Adapter --> uvicorn --> FastAPI
 | **Total for a demo left up for a month** | | **well under $1** |
 
 **Worst case, and why it's capped.** The URL is public. If someone hammered it 24/7:
-- With reserved concurrency 2 at 1 GB, that's up to roughly **$60–90/month**.
-- If your account's limit is 10 and the reservation is refused, up to 5× that.
+- With reserved concurrency 2 at 2 GB, that's up to roughly **$120–180/month**.
+- New accounts have a limit of 10 concurrent executions, and AWS won't reserve below that floor
+  (this happened on the real deploy). Then the account limit of 10 is the only cap, and the bill
+  could be up to 5× that.
+
+That's why the budget alert and teardown below matter.
 
 Protections, in order of importance:
 1. **Tear down after recording the demo** (`deploy/aws/teardown.sh`).
@@ -64,15 +68,11 @@ Accounts created after 15 July 2025 start on AWS's free plan with credits. Check
    4. Keep the window open for step B2. **Never paste these keys into chat, code or a file in the
       repo.**
 5. **Install the AWS CLI:** download https://awscli.amazonaws.com/AWSCLIV2.pkg, double-click, and
-   choose **"Install for me only"** (no admin password needed).
+   choose **"Install for all users of this computer"** (asks for your Mac password, and puts `aws` on
+   your PATH automatically). Open a new terminal and check that `aws --version` works.
 
 ## B. Configure the CLI (you type; keys stay on your Mac)
-1. **Make `aws` findable.** If you chose "Install for me only", add the CLI to your PATH. Use the
-   folder the installer reports; typically:
-   ```bash
-   echo 'export PATH="$HOME/aws-cli:$PATH"' >> ~/.zshrc && source ~/.zshrc
-   ```
-2. **Enter your keys:**
+1. **Enter your keys:**
    ```bash
    aws configure          # paste the access key + secret, region us-east-1, output json
    aws sts get-caller-identity   # should print your account id and the shipsense-deployer ARN
@@ -86,12 +86,28 @@ make train                 # if models/ is empty
 deploy/aws/deploy.sh       # S3 -> ECR -> IAM role -> Lambda -> Function URL -> smoke test
 ```
 - It prints the URL. Open `<URL>docs` for the interactive API.
-- The **first request is a cold start**: Lambda pulls the image and downloads the model, which takes
-  about 10–30 s. Later requests are fast until the function has been idle a while.
+- The **first request is a cold start**: Lambda starts the container, imports pandas and scikit-learn,
+  and downloads the model. Measured at 2 GB: about 7–8 s. Later requests are fast until the function
+  has been idle a while.
 - Point the Streamlit demo at it:
   `SHIPSENSE_API_URL=<URL without trailing slash> make demo` (the copilot tab will say it's unavailable).
 - Re-running `deploy.sh` updates everything in place. A retrained model gets a new S3 key and a new
   image tag.
+
+## Measured on the real deploy (5 Nov 2026, us-east-1, arm64)
+| What | Result |
+|---|---|
+| `deploy.sh` end to end (S3 → ECR → IAM → Lambda → URL → smoke test) | 2 min 12 s |
+| Smoke test on AWS | same model hash (`9a54d461cf83`) and same prediction (0.4078) as local |
+| Cold start at **1024 MB** | init hit Lambda's 10 s limit (`Status: timeout`), retried; first request ≈ 26 s |
+| Cold start at **2048 MB** | init 7.2 s, first request 7.7 s (now the default) |
+| Warm `/predict`, 100 calls from a laptop over the internet | median 65 ms, p95 73 ms |
+| `/predict/batch` with 1,000 orders (1024 MB) | median 350 ms |
+| Memory actually used | ~330 MB |
+| Reserved concurrency 2 | refused: new account limit is 10 (the account limit caps it instead) |
+
+The lesson: Lambda gives CPU in proportion to memory, so a CPU-bound startup (importing pandas and
+scikit-learn) can need more "memory" even though RAM use is only ~330 MB.
 
 ## D. Tear down (after the demo)
 ```bash

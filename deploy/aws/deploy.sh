@@ -15,7 +15,9 @@ REPO="${NAME}-api"
 ROLE="${NAME}-lambda-role"
 FUNCTION="${NAME}-api"
 MODEL_FILE="models/gradient_boosting.joblib"
-MEMORY_MB=1024           # also scales CPU; sklearn + pandas start comfortably here
+MEMORY_MB=2048           # Lambda CPU scales with memory. Measured: at 1024 MB startup (pandas/sklearn
+                         # imports + S3 download) hit Lambda's 10 s init limit, first request ~26 s;
+                         # at 2048 MB init 7.2 s, first request 7.7 s. Uses ~330 MB of RAM either way.
 RESERVED_CONCURRENCY=2   # caps parallel copies, which caps the worst-case bill if the URL is abused
 
 cd "$(dirname "$0")/../.."
